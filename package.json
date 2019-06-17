@@ -1,0 +1,27 @@
+{
+  "name": "BingoBois",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev ./src/app.ts --no-notify",
+    "test": "jest --forceExit --runInBand --config jest.config.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ts-node-dev": "^1.0.0-pre.40",
+    "typescript": "^3.5.2",
+    "mysql": "2.17.1",
+    "jest": "24.8.0",
+    "ts-jest": "24.0.2"
+  },
+  "devDependencies": {
+    "dbfixtures-mysql-driver": "1.1.0",
+    "dbfixtures": "1.1.1",
+    "@types/mysql": "2.15.6",
+    "@types/jest": "24.0.14",
+    "@types/node": "12.0.8"
+  }
+}
