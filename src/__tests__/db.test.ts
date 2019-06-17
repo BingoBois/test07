@@ -1,8 +1,3 @@
-import { IAccount, ICreditCard } from "../types/types";
-import Account from "../classes/account";
-import CreditCard from "../classes/creditcard";
-import bashHelper from "../helpers/bashHelper";
-
 const dbfixtures = require('dbfixtures');
 const fixturesMysqlDriver = require('dbfixtures-mysql-driver');
 
@@ -37,9 +32,5 @@ beforeAll(async function () {
 describe('fixtures example', function () {
   beforeEach(async function () {
     await dbfixtures.insertFixtures(fixtures);
-  });
-
-  it('should have the database seeded with the fixtures', function () {
-    // ...
   });
 });

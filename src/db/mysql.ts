@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { ICreditCard, IAccount } from '../types/types'
 import CreditCard from '../classes/creditcard'
+import Account from '../classes/account';
 
 export function createCreditCard(
     connection: mysql.Connection,
@@ -22,7 +23,7 @@ export function createCreditCard(
             [pincode, created, last_used, attempts, blocked, account.id],
             (error, rows) => {
                 if (error) {
-                    throw error
+                    reject(error)
                 }
                 resolve(convertRowPacketToArray(rows[1])[0] as CreditCard); 
             }
@@ -36,6 +37,7 @@ export function updateCreditCard(
 ) : Promise<CreditCard> {
     return new Promise((resolve, reject) => {
         const {
+            id,
             account,
             attempts,
             blocked,
@@ -44,15 +46,88 @@ export function updateCreditCard(
             pincode,
         } = creditcard
         connection.query(
-            'UPDATE creditcards SET pincode=?, created=?, last_used=?, attempts=?, blocked=? where id = ?;',
-            [pincode, created, last_used, attempts, blocked, creditcard.id],
+            'UPDATE creditcards SET pincode=?, created=?, last_used=?, attempts=?, blocked=? where id = ?; SELECT * FROM creditcards where id=?;',
+            [pincode, created, last_used, attempts, blocked, id, id],
             (error, rows) => {
                 if (error) {
-                    throw error
+                    reject(error); 
                 }
                 resolve(convertRowPacketToArray(rows[1])[0] as CreditCard); 
             }
         )
+
+    })
+}
+
+export function createAccount(connection: mysql.Connection, account: Account) : Promise<Account> {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'INSERT INTO accounts (balance) VALUES (?); SELECT * FROM accounts where id = (SELECT LAST_INSERT_ID());',
+            [account.balance],
+            (error, rows) => {
+                if (error) {
+                    reject(error)
+                }
+                resolve(convertRowPacketToArray(rows[1])[0] as Account); 
+            }
+        )
+    })
+}
+
+export function updateAccount(
+    connection: mysql.Connection,
+    account: Account
+) : Promise<Account> {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'UPDATE accounts SET balance=? where id = ?; SELECT * FROM accounts where id=?;',
+            [account.balance, account.id, account.id],
+            (error, rows) => {
+                if (error) {
+                    reject(error); 
+                }
+                resolve(convertRowPacketToArray(rows[1])[0] as Account); 
+            }
+        )
+
+    })
+}
+
+export function getAccount(
+    connection: mysql.Connection,
+    id: number
+) : Promise<Account> {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'SELECT * FROM accounts where id=?;',
+            [id],
+            (error, rows) => {
+                if (error) {
+                    reject(error); 
+                }
+                resolve(convertRowPacketToArray(rows[1])[0] as Account); 
+            }
+        )
+
+    })
+}
+
+export function getCreditCard(
+    connection: mysql.Connection,
+    id: number
+) : Promise<CreditCard> {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'SELECT * FROM creditcards where id=?;',
+            [id],
+            (error, rows) => {
+                if (error) {
+                    reject(error); 
+                }
+                resolve(convertRowPacketToArray(rows[1])[0] as CreditCard); 
+            }
+        )
+
     })
 }
 

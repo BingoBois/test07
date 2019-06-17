@@ -1,7 +1,7 @@
 import { IBank, IAccount, ICreditCard } from "../types/types";
 import List from './List'
 import * as mysql from "mysql";
-import { createCreditCard } from '../db/mysql'
+import { createCreditCard, updateCreditCard, createAccount, updateAccount, getAccount, getCreditCard } from '../db/mysql'
 import CreditCard from "./creditcard";
 import Account from "./account";
 
@@ -9,6 +9,7 @@ const MYSQL_HOST = process.env.MYSQL_HOST ? process.env.MYSQL_HOST : "localhost"
 const MYSQL_USER = process.env.MYSQL_USER ? process.env.MYSQL_USER : "root";
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD ? process.env.MYSQL_PASSWORD : "mingade85";
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE ? process.env.MYSQL_DATABASE : "test07";
+const PROD_ENV = process.env.PROD_ENV ? process.env.PROD_ENV : "test07"
 
 export default class Bank implements IBank{
     
@@ -37,27 +38,25 @@ export default class Bank implements IBank{
     async createCreditCard(creditcard: CreditCard): Promise<CreditCard> {
         return await createCreditCard(this.connection, creditcard);
     }
-    updateCreditCard(creditcard: ICreditCard): Promise<ICreditCard> {
+    async updateCreditCard(creditcard: CreditCard): Promise<CreditCard> {
+        return await updateCreditCard(this.connection, creditcard);
+    }
+    async getCreditCard(id: number): Promise<CreditCard> {
+        return await getCreditCard(this.connection, id);
+    }
+    getCreditCards(): Promise<List<CreditCard>> {
         throw new Error("Method not implemented.");
     }
-    getCreditCard(id: number): ICreditCard {
-        throw new Error("Method not implemented.");
+    async createAccount(account: Account): Promise<Account> {
+        return await createAccount(this.connection, account); 
     }
-    getCreditCards(): List<ICreditCard> {
-        throw new Error("Method not implemented.");
+    async updateAccount(account: Account): Promise<Account> {
+        return await updateAccount(this.connection, account);
     }
-    createAccount(account: Account): Account {
-        throw new Error("Method not implemented.");
-    }
-    updateAccount(account: Account): void {
-        throw new Error("Method not implemented.");
-    }
-    getAccount(id: number): Account {
-        throw new Error("Method not implemented.");
+    async getAccount(id: number): Promise<Account> {
+        return await getAccount(this.connection, id);
     }
     getAccounts(): List<Account> {
         throw new Error("Method not implemented.");
     }
-    
-    
 }

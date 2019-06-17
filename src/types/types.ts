@@ -33,12 +33,12 @@ export interface ICreditCard{
 export interface IBank{
     setDataSource(connection: Connection);
     createCreditCard(creditcard: CreditCard): Promise<CreditCard>;
-    updateCreditCard(creditcard: ICreditCard): Promise<ICreditCard>;
-    getCreditCard(id: number): ICreditCard;
-    getCreditCards(): List<ICreditCard>;
-    createAccount(account: Account): Account;
-    updateAccount(account: Account): void;
-    getAccount(id: number): Account;
+    updateCreditCard(creditcard: CreditCard): Promise<CreditCard>;
+    getCreditCard(id: number): Promise<CreditCard>;
+    getCreditCards(): Promise<List<CreditCard>>;
+    createAccount(account: Account): Promise<Account>;
+    updateAccount(account: Account): Promise<Account>;
+    getAccount(id: number): Promise<Account>;
     getAccounts(): List<Account>;
 
 }
